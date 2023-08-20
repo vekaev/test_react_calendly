@@ -36,7 +36,7 @@ export const BookingMeeting = () => {
       ),
       async onOk() {
         try {
-          await bookMeeting(selectedDate.toDate());
+          await bookMeeting(timeSlot.toDate());
           message.success("Meeting booked successfully");
           navigate(RoutePath.HOME);
         } catch {
