@@ -38,8 +38,8 @@ export const createMeeting = async (
   const meeting: IMeeting = {
     userId,
     id: `${data.length + 1}`,
-    startTimestamp: start.toISOString(),
-    endTimestamp: end.toISOString(),
+    startTimestamp: start.toUTCString(),
+    endTimestamp: end.toUTCString(),
   };
 
   data.push(meeting);
@@ -56,6 +56,11 @@ export const createMeeting = async (
     )
   );
 
+  localStorage.setItem(
+    `meeting-${meeting.startTimestamp}`,
+    JSON.stringify(meeting)
+  );
+
   return meeting;
 };
 
@@ -68,10 +73,13 @@ export const deleteMeeting = async (
   await sleep(500);
 
   const index = data.findIndex((meeting) => meeting.id === meetingId);
+  const meeting = data[index];
 
   if (index > -1) {
     data.splice(index, 1);
   }
+
+  localStorage.removeItem(`meeting-${meeting.startTimestamp}`);
 
   localStorage.setItem(`meetings-${userId}`, JSON.stringify(data));
 };
@@ -83,7 +91,7 @@ export const fetchAvailableTimeSlots = async (
 ): Promise<Date[]> => {
   await sleep(500);
   console.info("fetching time slots for", date, userId);
-  return generateTimeSlotsForRange(9, 15, 30, "PST").map((timeSlot) =>
-    timeSlot.toDate()
-  );
+  return generateTimeSlotsForRange(date, 9, 15, 30, "PST")
+    .map((timeSlot) => timeSlot.toDate())
+    .filter((date) => !localStorage.getItem(`meeting-${date.toUTCString()}`));
 };
