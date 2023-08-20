@@ -44,9 +44,36 @@ export const createMeeting = async (
 
   data.push(meeting);
 
-  localStorage.setItem(`meetings-${userId}`, JSON.stringify(data));
+  localStorage.setItem(
+    `meetings-${userId}`,
+    JSON.stringify(
+      data.sort((a, b) => {
+        return (
+          new Date(a.startTimestamp).getTime() -
+          new Date(b.startTimestamp).getTime()
+        );
+      })
+    )
+  );
 
   return meeting;
+};
+
+export const deleteMeeting = async (
+  userId: string,
+  meetingId: string
+): Promise<void> => {
+  const data = await getMeetings(userId);
+
+  await sleep(500);
+
+  const index = data.findIndex((meeting) => meeting.id === meetingId);
+
+  if (index > -1) {
+    data.splice(index, 1);
+  }
+
+  localStorage.setItem(`meetings-${userId}`, JSON.stringify(data));
 };
 
 // TODO: change implementation to fetch from API
