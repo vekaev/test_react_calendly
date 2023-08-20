@@ -25,7 +25,7 @@ export const TimeSlots = ({
             style={{ width: "100%", marginRight: 4 }}
             onClick={() => setSelectedSlot(timeSlot)}
           >
-            {timeSlot.format("HH:mm")}
+            {timeSlot.format("h:mm A")}
           </Button>
           {selectedSlot === timeSlot && (
             <Button
