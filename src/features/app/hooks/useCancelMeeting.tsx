@@ -3,11 +3,9 @@ import { useState } from "react";
 
 import { useTimeZone } from "./useTimezone";
 import { IMeeting } from "~types/models/IMeeting";
-import { useAuth } from "~features/auth/hooks/useAuth";
 import { deleteMeeting } from "../services/meeting.service";
 
 export const useCancelMeeting = () => {
-  const { user } = useAuth();
   const [timezone] = useTimeZone();
   const [loading, setLoading] = useState(false);
 
@@ -15,7 +13,7 @@ export const useCancelMeeting = () => {
     setLoading(true);
 
     try {
-      await deleteMeeting(user!.id, meeting.id);
+      await deleteMeeting(meeting.id);
     } finally {
       setLoading(false);
     }

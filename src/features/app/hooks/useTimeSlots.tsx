@@ -15,7 +15,7 @@ export const useTimeSlots = (date: Dayjs, timezone: string) => {
 
       const now = dayjs();
       const result = (
-        await fetchAvailableTimeSlots(date.toDate(), user!.id).catch(() => [])
+        await fetchAvailableTimeSlots(date.toDate()).catch(() => [])
       ).map((timeSlot) => dayjs(timeSlot).tz(timezone).date(date.date()));
 
       setLoading(false);

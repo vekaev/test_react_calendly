@@ -16,7 +16,7 @@ export const useBookMeeting = () => {
         await createMeeting(
           user!.id,
           timeSlot,
-          dayjs(timeSlot).add(60, "minutes").toDate()
+          dayjs(timeSlot).add(30, "minutes").toDate()
         );
       } catch (error) {
         console.error(error);
